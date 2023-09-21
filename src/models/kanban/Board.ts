@@ -6,21 +6,12 @@ export enum Status {
   done = "done",
 }
 
-export interface TaskInterface {
-  title: string;
-  subtasks: {
-    title: string;
-    isDone: Boolean;
-  }[];
-  status: Status;
-}
-
 export interface BoardInterface {
   title: string;
   user: Types.ObjectId;
-  todo: TaskInterface[];
-  doing: TaskInterface[];
-  done: TaskInterface[];
+  todo: Types.ObjectId[];
+  doing: Types.ObjectId[];
+  done: Types.ObjectId[];
 }
 
 const boardSchema = new Schema<BoardInterface>(
@@ -30,15 +21,27 @@ const boardSchema = new Schema<BoardInterface>(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    todo: {
-      default: [],
-    },
-    doing: {
-      default: [],
-    },
-    done: {
-      default: [],
-    },
+    todo: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Task",
+        default: [],
+      },
+    ],
+    doing: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Task",
+        default: [],
+      },
+    ],
+    done: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Task",
+        default: [],
+      },
+    ],
   },
   { timestamps: true }
 );

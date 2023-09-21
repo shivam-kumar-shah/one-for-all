@@ -1,7 +1,12 @@
 import { RequestHandler } from "express";
 import { User, UserInterface } from "../../models/auth/User";
 import { Board } from "../../models/kanban/Board";
-import { AppReqBody } from "../../models/util/AppReqBody";
+import {
+  AppReqBody,
+  EditTaskPayload,
+  PostBoardPayload,
+  PostTaskPayload,
+} from "../../models/util/AppReqBody";
 
 export const getAllBoards: RequestHandler<
   unknown,
@@ -10,7 +15,6 @@ export const getAllBoards: RequestHandler<
   unknown
 > = async (req, res, next) => {
   const { auth } = req.body;
-  console.log(auth);
   try {
     const doc = await User.findById(auth?.id).populate({
       path: "boards",
@@ -57,3 +61,31 @@ export const getBoardById: RequestHandler = async (req, res, next) => {
     });
   }
 };
+
+export const postBoard: RequestHandler<
+  unknown,
+  unknown,
+  AppReqBody<PostBoardPayload>,
+  unknown
+> = async (req, res, next) => {};
+
+export const postTask: RequestHandler<
+  unknown,
+  unknown,
+  AppReqBody<PostTaskPayload>,
+  unknown
+> = async (req, res, next) => {};
+
+export const editTask: RequestHandler<
+  unknown,
+  unknown,
+  AppReqBody<EditTaskPayload>,
+  unknown
+> = async (req, res, next) => {};
+
+export const deleteTask: RequestHandler<
+  unknown,
+  unknown,
+  AppReqBody,
+  unknown
+> = async (req, res, next) => {};
