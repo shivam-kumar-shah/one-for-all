@@ -14,14 +14,26 @@ const boardSchema = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "User",
     },
-    todo: {
-        default: [],
-    },
-    doing: {
-        default: [],
-    },
-    done: {
-        default: [],
-    },
+    todo: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: "Task",
+            default: [],
+        },
+    ],
+    doing: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: "Task",
+            default: [],
+        },
+    ],
+    done: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: "Task",
+            default: [],
+        },
+    ],
 }, { timestamps: true });
 exports.Board = (0, mongoose_1.model)("Board", boardSchema);

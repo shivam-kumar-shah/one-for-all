@@ -23,39 +23,31 @@ export const join: RequestHandler<
     });
     return;
   }
-  try {
-    const foundUser = await User.findOne({ email });
-    if (foundUser) {
-      res.status(409).send({
-        status: "Resource conflict",
-        message: "User exists already. Try signing in.",
-      });
-      return;
-    }
-    const hashedPassword = await hash(password, +process.env.HASH_SECRET);
-    const newUser = new User({
-      email,
-      username,
-      hashedPassword,
+  const foundUser = await User.findOne({ email });
+  if (foundUser) {
+    res.status(409).send({
+      status: "Resource conflict",
+      message: "User exists already. Try signing in.",
     });
-    await newUser.save();
-    const userToken: UserToken = {
-      id: newUser._id.toString(),
-      email,
-      username,
-    };
-    res.status(201).send({
-      status: "Resource allocated.",
-      message: "User created successfully.",
-      access_token: sign(userToken, process.env.JWT_SECRET),
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      status: "Internal server error.",
-      message: "An error occured. Please try again.",
-    });
+    return;
   }
+  const hashedPassword = await hash(password, +process.env.HASH_SECRET);
+  const newUser = new User({
+    email,
+    username,
+    hashedPassword,
+  });
+  await newUser.save();
+  const userToken: UserToken = {
+    id: newUser._id.toString(),
+    email,
+    username,
+  };
+  res.status(201).send({
+    status: "Resource allocated.",
+    message: "User created successfully.",
+    access_token: sign(userToken, process.env.JWT_SECRET),
+  });
 };
 
 export const signIn: RequestHandler<
@@ -72,38 +64,31 @@ export const signIn: RequestHandler<
     });
     return;
   }
-  try {
-    const foundUser = await User.findOne({ email });
-    if (!foundUser) {
-      res.status(404).send({
-        status: "Resource not found.",
-        message: "User not found. Try signing up.",
-      });
-      return;
-    }
-    const isValid = await compare(password, foundUser.hashedPassword);
-    if (!isValid) {
-      res.status(403).send({
-        status: "Forbidden.",
-        message: "Auth Error. Invalid user.",
-      });
-      return;
-    }
-    const userToken: UserToken = {
-      id: foundUser._id.toString(),
-      email,
-      username: foundUser.username,
-    };
-    res.status(200).send({
-      status: "Success.",
-      message: "Signed in successfully.",
-      access_token: sign(userToken, process.env.JWT_SECRET),
+
+  const foundUser = await User.findOne({ email });
+  if (!foundUser) {
+    res.status(404).send({
+      status: "Resource not found.",
+      message: "User not found. Try signing up.",
     });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      status: "Internal server error.",
-      message: "An error occured. Please try again.",
-    });
+    return;
   }
+  const isValid = await compare(password, foundUser.hashedPassword);
+  if (!isValid) {
+    res.status(403).send({
+      status: "Forbidden.",
+      message: "Auth Error. Invalid user.",
+    });
+    return;
+  }
+  const userToken: UserToken = {
+    id: foundUser._id.toString(),
+    email,
+    username: foundUser.username,
+  };
+  res.status(200).send({
+    status: "Success.",
+    message: "Signed in successfully.",
+    access_token: sign(userToken, process.env.JWT_SECRET),
+  });
 };

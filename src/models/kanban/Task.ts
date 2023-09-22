@@ -21,7 +21,10 @@ const taskSchema = new Schema<TaskInterface>(
       type: [
         {
           title: String,
-          isDone: Boolean,
+          isDone: {
+            type: Boolean,
+            default: false,
+          },
         },
       ],
       default: [],

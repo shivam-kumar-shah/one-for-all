@@ -25,11 +25,19 @@ export interface PostBoardPayload {
 }
 
 export interface PostTaskPayload {
+  id: string;
   title: string;
   status?: Status;
+  subtasks: { title: string; isDone?: boolean }[];
+}
+
+export interface EditBoardPayload {
+  id: string;
+  title: string;
 }
 
 export interface EditTaskPayload {
+  id: string;
   title: string;
   subtasks: {
     title: string;
@@ -37,8 +45,22 @@ export interface EditTaskPayload {
   }[];
   status?: Status;
 }
+export interface AddSubTaskPayload {
+  id: string;
+  title: string;
+  isDone?: boolean;
+}
+
+export interface DeleteTaskPayload {
+  id: string;
+  boardId: string;
+}
+
+export interface DeleteBoardPayload {
+  id: string;
+}
 
 export interface AppReqBody<T = {}> {
-  auth?: UserToken;
+  auth: UserToken;
   payload: T;
 }

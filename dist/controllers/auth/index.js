@@ -22,40 +22,31 @@ const join = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
         });
         return;
     }
-    try {
-        const foundUser = yield User_1.User.findOne({ email });
-        if (foundUser) {
-            res.status(409).send({
-                status: "Resource conflict",
-                message: "User exists already. Try signing in.",
-            });
-            return;
-        }
-        const hashedPassword = yield (0, bcrypt_1.hash)(password, +process.env.HASH_SECRET);
-        const newUser = new User_1.User({
-            email,
-            username,
-            hashedPassword,
+    const foundUser = yield User_1.User.findOne({ email });
+    if (foundUser) {
+        res.status(409).send({
+            status: "Resource conflict",
+            message: "User exists already. Try signing in.",
         });
-        yield newUser.save();
-        const userToken = {
-            id: newUser._id.toString(),
-            email,
-            username,
-        };
-        res.status(201).send({
-            status: "Resource allocated.",
-            message: "User created successfully.",
-            access_token: (0, jsonwebtoken_1.sign)(userToken, process.env.JWT_SECRET),
-        });
+        return;
     }
-    catch (error) {
-        console.log(error);
-        res.status(500).send({
-            status: "Internal server error.",
-            message: "An error occured. Please try again.",
-        });
-    }
+    const hashedPassword = yield (0, bcrypt_1.hash)(password, +process.env.HASH_SECRET);
+    const newUser = new User_1.User({
+        email,
+        username,
+        hashedPassword,
+    });
+    yield newUser.save();
+    const userToken = {
+        id: newUser._id.toString(),
+        email,
+        username,
+    };
+    res.status(201).send({
+        status: "Resource allocated.",
+        message: "User created successfully.",
+        access_token: (0, jsonwebtoken_1.sign)(userToken, process.env.JWT_SECRET),
+    });
 });
 exports.join = join;
 const signIn = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -67,40 +58,31 @@ const signIn = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         });
         return;
     }
-    try {
-        const foundUser = yield User_1.User.findOne({ email });
-        if (!foundUser) {
-            res.status(404).send({
-                status: "Resource not found.",
-                message: "User not found. Try signing up.",
-            });
-            return;
-        }
-        const isValid = yield (0, bcrypt_1.compare)(password, foundUser.hashedPassword);
-        if (!isValid) {
-            res.status(403).send({
-                status: "Forbidden.",
-                message: "Auth Error. Invalid user.",
-            });
-            return;
-        }
-        const userToken = {
-            id: foundUser._id.toString(),
-            email,
-            username: foundUser.username,
-        };
-        res.status(200).send({
-            status: "Success.",
-            message: "Signed in successfully.",
-            access_token: (0, jsonwebtoken_1.sign)(userToken, process.env.JWT_SECRET),
+    const foundUser = yield User_1.User.findOne({ email });
+    if (!foundUser) {
+        res.status(404).send({
+            status: "Resource not found.",
+            message: "User not found. Try signing up.",
         });
+        return;
     }
-    catch (error) {
-        console.log(error);
-        res.status(500).send({
-            status: "Internal server error.",
-            message: "An error occured. Please try again.",
+    const isValid = yield (0, bcrypt_1.compare)(password, foundUser.hashedPassword);
+    if (!isValid) {
+        res.status(403).send({
+            status: "Forbidden.",
+            message: "Auth Error. Invalid user.",
         });
+        return;
     }
+    const userToken = {
+        id: foundUser._id.toString(),
+        email,
+        username: foundUser.username,
+    };
+    res.status(200).send({
+        status: "Success.",
+        message: "Signed in successfully.",
+        access_token: (0, jsonwebtoken_1.sign)(userToken, process.env.JWT_SECRET),
+    });
 });
 exports.signIn = signIn;
