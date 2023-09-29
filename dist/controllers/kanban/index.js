@@ -46,7 +46,7 @@ const getBoardById = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         id: doc === null || doc === void 0 ? void 0 : doc.id,
         todo: doc === null || doc === void 0 ? void 0 : doc.todo,
         doing: doc === null || doc === void 0 ? void 0 : doc.doing,
-        done: doc === null || doc === void 0 ? void 0 : doc.todo,
+        done: doc === null || doc === void 0 ? void 0 : doc.done,
     });
 });
 exports.getBoardById = getBoardById;
@@ -72,32 +72,37 @@ const postBoard = (req, res, next) => __awaiter(void 0, void 0, void 0, function
 });
 exports.postBoard = postBoard;
 const postTask = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title, id: boardId, status, subtasks } = req.body.payload;
-    const { id } = req.body.auth;
-    const foundUser = yield User_1.User.findById(id);
-    if (!foundUser) {
-        res.status(404).send({
-            status: "Resource not found.",
-            message: "User not found. Try signing up.",
+    try {
+        const { title, id: boardId, status, subtasks } = req.body.payload;
+        const { id } = req.body.auth;
+        const foundUser = yield User_1.User.findById(id);
+        if (!foundUser) {
+            res.status(404).send({
+                status: "Resource not found.",
+                message: "User not found. Try signing up.",
+            });
+            return;
+        }
+        const foundBoard = yield Board_1.Board.findById(boardId);
+        if (!foundBoard) {
+            res.status(404).send({
+                status: "Resource not found.",
+                message: "Invalid board ID.",
+            });
+            return;
+        }
+        const newTask = new Task_1.Task({ title, status, subtasks });
+        foundBoard[status !== null && status !== void 0 ? status : Board_1.Status.todo].push(newTask.id);
+        yield foundBoard.save();
+        yield newTask.save();
+        res.status(201).send({
+            status: "Resource created.",
+            message: "Task created successfully.",
         });
-        return;
     }
-    const foundBoard = yield Board_1.Board.findById(boardId);
-    if (!foundBoard) {
-        res.status(404).send({
-            status: "Resource not found.",
-            message: "Invalid board ID.",
-        });
-        return;
+    catch (err) {
+        next(err);
     }
-    const newTask = new Task_1.Task({ title, status, subtasks });
-    foundBoard[status !== null && status !== void 0 ? status : Board_1.Status.todo].push(newTask.id);
-    yield foundBoard.save();
-    yield newTask.save();
-    res.status(201).send({
-        status: "Resource created.",
-        message: "Board created successfully.",
-    });
 });
 exports.postTask = postTask;
 const editBoard = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

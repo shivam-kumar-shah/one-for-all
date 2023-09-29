@@ -22,6 +22,7 @@ const isAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
     }
     try {
         const { email, id, username } = (0, jsonwebtoken_1.verify)(token, process.env.JWT_SECRET);
+        req.body.payload = req.body;
         req.body.auth = {
             email,
             id,

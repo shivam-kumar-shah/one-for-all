@@ -22,6 +22,7 @@ export const isAuth: RequestHandler<
       token,
       process.env.JWT_SECRET
     ) as JwtPayload;
+    req.body.payload = req.body;
     req.body.auth = {
       email,
       id,

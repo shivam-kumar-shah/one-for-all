@@ -7,7 +7,7 @@ var Status;
     Status["todo"] = "todo";
     Status["doing"] = "doing";
     Status["done"] = "done";
-})(Status || (exports.Status = Status = {}));
+})(Status = exports.Status || (exports.Status = {}));
 const boardSchema = new mongoose_1.Schema({
     title: { type: String, required: true },
     user: {
