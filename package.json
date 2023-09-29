@@ -2,7 +2,7 @@
   "scripts": {
     "build": "npm i",
     "dev": "tsc && node dist/app.js",
-    "start": "node dist/app.js"
+    "start": "node ."
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -14,5 +14,6 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.2"
-  }
+  },
+  "main": "dist/app.js"
 }
