@@ -1,7 +1,8 @@
 {
   "scripts": {
     "build": "npm i",
-    "start": "npx tsc && node dist/app.js"
+    "dev": "tsc && node dist/app.js",
+    "start": "node dist/app.js"
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -12,7 +13,6 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.5.2",
-    "tsc": "^2.0.4"
+    "mongoose": "^7.5.2"
   }
 }
