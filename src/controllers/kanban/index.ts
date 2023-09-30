@@ -24,7 +24,7 @@ export const getAllBoards: RequestHandler<
 
     const doc = await User.findById(auth?.id).populate({
       path: "boards",
-      select: ["_id", "title"],
+      select: ["_id", "title", "createdAt", "updatedAt"],
     });
     res.send({
       uid: doc?._id,
