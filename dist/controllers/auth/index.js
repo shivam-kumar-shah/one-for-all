@@ -46,6 +46,8 @@ const join = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(201).send({
             status: "Resource allocated.",
             message: "User created successfully.",
+            username: newUser.username,
+            email: newUser.email,
             access_token: (0, jsonwebtoken_1.sign)(userToken, process.env.JWT_SECRET),
         });
     }
@@ -88,6 +90,8 @@ const signIn = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         res.status(200).send({
             status: "Success.",
             message: "Signed in successfully.",
+            username: foundUser.username,
+            email: foundUser.email,
             access_token: (0, jsonwebtoken_1.sign)(userToken, process.env.JWT_SECRET),
         });
     }

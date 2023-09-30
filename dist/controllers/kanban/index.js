@@ -18,7 +18,6 @@ const getAllBoards = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         const { auth } = req.body;
         const doc = yield User_1.User.findById(auth === null || auth === void 0 ? void 0 : auth.id).populate({
             path: "boards",
-            select: ["_id", "title", "createdAt", "updatedAt"],
         });
         res.send({
             uid: doc === null || doc === void 0 ? void 0 : doc._id,

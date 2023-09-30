@@ -47,6 +47,8 @@ export const join: RequestHandler<
     res.status(201).send({
       status: "Resource allocated.",
       message: "User created successfully.",
+      username: newUser.username,
+      email: newUser.email,
       access_token: sign(userToken, process.env.JWT_SECRET),
     });
   } catch (err) {
@@ -94,6 +96,8 @@ export const signIn: RequestHandler<
     res.status(200).send({
       status: "Success.",
       message: "Signed in successfully.",
+      username: foundUser.username,
+      email: foundUser.email,
       access_token: sign(userToken, process.env.JWT_SECRET),
     });
   } catch (err) {
