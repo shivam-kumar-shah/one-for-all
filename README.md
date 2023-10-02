@@ -49,7 +49,7 @@ One-for-All uses MongoDB Atlas as the database. Ensure you have a valid connecti
 
 ## Hosting
 
-This project is hosted on Cyclic for reliable performance and availability.
+This project is hosted on Cyclic for reliable performance and availability, [here](https://odd-cyan-yak-robe.cyclic.cloud/).
 
 ## Contributing
 
